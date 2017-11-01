@@ -1,4 +1,3 @@
-import cv2
 import numpy as np
 from collections import deque
 from PIL import Image
@@ -49,8 +48,7 @@ def combine_shreds(shreds):
 
 
 def unshred_image(shred_width):
-    
-    rgb_image = cv2.imread('sample_shredded.png')
+    rgb_image = np.asarray(Image.open('sample_shredded.png'))
     image_shreds = list()
     for i in range(0, rgb_image.shape[1], shred_width):
         image_shreds.append(rgb_image[:, i:i + shred_width])
@@ -74,7 +72,9 @@ def unshred_image(shred_width):
         if len(ordered_shreds) == len(image_shreds) and len(list(grouper(sorted(differences)))) == 1:
             break
     unshredded_image = combine_shreds(list(ordered_shreds))
-    cv2.imwrite("unshredded.jpg", unshredded_image)
+    im = Image.fromarray(np.uint8(unshredded_image))
+    #cv2.imwrite(, unshredded_image)
+    im.save('unshredded.jpg')
 
 
 def shred_image(file_name):
@@ -94,5 +94,5 @@ def shred_image(file_name):
     shredded.save('sample_shredded.png')
     return shred_width
 
-shred_width = shred_image('/home/tata/Projects/Computer Vision/random17.jpg')
+shred_width = shred_image('/home/tata/Projects/Computer Vision/Instagram_unshredder/random6.jpg')
 unshred_image(shred_width)
